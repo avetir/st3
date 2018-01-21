@@ -1,0 +1,1 @@
+ALTER TABLE H_user ALTER COLUMN role TYPE user_role USING role::user_role;
