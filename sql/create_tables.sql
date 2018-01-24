@@ -18,11 +18,12 @@ CREATE TABLE H_room
 
 CREATE TABLE H_request
 (
-    id SERIAL PRIMARY KEY NOT NULL,
+    id CHAR(36) PRIMARY KEY NOT NULL,
     status VARCHAR(20) NOT NULL,
+    places_number INTEGER NOT NULL,
     date_time_in TIMESTAMP NOT NULL,
     date_time_out TIMESTAMP NOT NULL,
-	  user_id SERIAL REFERENCES H_user (id),
+	  user_id CHAR(36) REFERENCES H_user (id),
 	  room_number INTEGER REFERENCES H_room (room_number),
     room_class VARCHAR(50) NOT NULL
 );

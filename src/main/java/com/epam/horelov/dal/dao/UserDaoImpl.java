@@ -17,6 +17,12 @@ public class UserDaoImpl implements UserDao {
     private static final String SELECT_USER_BY_EMAIL_QUERY = "SELECT * FROM h_user WHERE H_user.email = ?;";
     private static final String INSERT_USER_QUERY = "INSERT INTO h_user (id, name, email, password, role) VALUES (?, ?, ?, ?, ?::USER_ROLE);";
 
+    public static final String ID = "id";
+    public static final String NAME = "name";
+    public static final String EMAIL = "email";
+    public static final String PASSWORD = "password";
+    public static final String ROLE = "role";
+
     private Connection connection;
     private PreparedStatement selectUserPreparedStatement;
     private PreparedStatement insertUserPreparedStatement;
@@ -45,11 +51,11 @@ public class UserDaoImpl implements UserDao {
             ResultSet rs = selectUserPreparedStatement.executeQuery();
             User user = new User();
             while (rs.next()) {
-                user.setId(rs.getString("id"));
-                user.setFullName(rs.getString("name"));
-                user.setEmail(rs.getString("email"));
-                user.setPassword(rs.getInt("password"));
-                user.setRole(Roles.valueOf(rs.getString("role")));
+                user.setId(rs.getString(ID));
+                user.setFullName(rs.getString(NAME));
+                user.setEmail(rs.getString(EMAIL));
+                user.setPassword(rs.getInt(PASSWORD));
+                user.setRole(Roles.valueOf(rs.getString(ROLE)));
             }
             return user;
         } catch (SQLException ex) {

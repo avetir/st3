@@ -24,6 +24,11 @@ import java.util.List;
 @WebServlet("/login")
 public class AuthenticationServlet extends HttpServlet {
 
+
+    public static final String EMAIL = "email";
+    public static final String PASSWORD = "password";
+    public static final int MAX_FIELD_CONTENT_LENGTH = 40;
+
     private AuthenticationService authenticationService = new AuthenticationService();
 
     public AuthenticationBean fillBean(HttpServletRequest request) {
@@ -39,13 +44,13 @@ public class AuthenticationServlet extends HttpServlet {
     public List<String> validateBean (AuthenticationBean authenticationBean){
         List<String> errors = new ArrayList<>();
 
-        if (authenticationBean.getEmail().length() > 40){
+        if (authenticationBean.getEmail().length() > MAX_FIELD_CONTENT_LENGTH){
             errors.add("Email field content is too long. (40 characters max)");
         } else if (StringUtils.isEmpty(authenticationBean.getEmail())) {
             errors.add("Name field is empty.");
         }
 
-        if (authenticationBean.getPassword().length() > 40){
+        if (authenticationBean.getPassword().length() > MAX_FIELD_CONTENT_LENGTH){
             errors.add("Password field content is too long. (40 characters max)");
         } else if (StringUtils.isEmpty(authenticationBean.getPassword())) {
             errors.add("Password field is empty.");
@@ -66,6 +71,7 @@ public class AuthenticationServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+
         HttpSession session = req.getSession();
         AuthenticationBean bean = fillBean(req);
         List<String> errors = validateBean(bean);

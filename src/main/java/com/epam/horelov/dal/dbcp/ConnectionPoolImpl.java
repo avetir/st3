@@ -18,7 +18,11 @@ public class ConnectionPoolImpl implements ConnectionPool{
     private static final String DB_USER = "postgres";
     private static final String DB_PASSWORD = "admin";
 
-    private Map<Connection, Boolean> connections = new HashMap<>();
+    private Map<Connection, Boolean> connections;
+
+    public ConnectionPoolImpl(){
+        connections = new HashMap<>();
+    }
 
     private Connection createConnection() {
         try {

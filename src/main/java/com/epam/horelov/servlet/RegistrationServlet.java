@@ -6,6 +6,8 @@ import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 
 import javax.servlet.RequestDispatcher;
+import javax.servlet.ServletContext;
+import javax.servlet.ServletContextListener;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -19,16 +21,23 @@ import java.util.List;
 @WebServlet("/registration")
 public class RegistrationServlet extends HttpServlet {
 
-    private RegistrationService registrationService = new RegistrationService();
+    public static final String NAME = "name";
+    public static final String EMAIL = "email";
+    public static final String PASSWORD = "password";
+    public static final String PASSWORD_CONFIRMATION = "password-confirmation";
+    public static final int MAX_FIELD_CONTENT_LENGTH = 40;
+
+    private RegistrationService registrationService =
+            (RegistrationService) getServletContext().getAttribute("REGISTRATION_SERVICE");
 
     public RegistrationBean fillBean(HttpServletRequest request) {
 
         RegistrationBean bean = new RegistrationBean();
 
-        bean.setFullName((String) request.getParameter("name"));
-        bean.setEmail((String) request.getParameter("email"));
-        bean.setPassword((String) request.getParameter("password"));
-        bean.setPasswordConfirmation((String) request.getParameter("password-confirmation"));
+        bean.setFullName((String) request.getParameter(NAME));
+        bean.setEmail((String) request.getParameter(EMAIL));
+        bean.setPassword((String) request.getParameter(PASSWORD));
+        bean.setPasswordConfirmation((String) request.getParameter(PASSWORD_CONFIRMATION));
 
         return bean;
     }
@@ -36,25 +45,25 @@ public class RegistrationServlet extends HttpServlet {
     public List<String> validateBean (RegistrationBean registrationBean){
         List<String> errors = new ArrayList<>();
 
-        if (registrationBean.getFullName().length() > 40){
+        if (registrationBean.getFullName().length() > MAX_FIELD_CONTENT_LENGTH){
             errors.add("Name field content is too long. (40 characters max)");
         } else if (StringUtils.isEmpty(registrationBean.getFullName())) {
             errors.add("Name field is empty.");
         }
 
-        if (registrationBean.getEmail().length() > 40){
+        if (registrationBean.getEmail().length() > MAX_FIELD_CONTENT_LENGTH){
             errors.add("Email field content is too long. (40 characters max)");
         } else if (StringUtils.isEmpty(registrationBean.getEmail())) {
             errors.add("Name field is empty.");
         }
 
-        if (registrationBean.getPassword().length() > 40){
+        if (registrationBean.getPassword().length() > MAX_FIELD_CONTENT_LENGTH){
             errors.add("Password field content is too long. (40 characters max)");
         } else if (StringUtils.isEmpty(registrationBean.getPassword())) {
             errors.add("Password field is empty.");
         }
 
-        if (registrationBean.getPasswordConfirmation().length() > 40){
+        if (registrationBean.getPasswordConfirmation().length() > MAX_FIELD_CONTENT_LENGTH){
             errors.add("Password confirmation field content is too long. (40 characters max)");
         } else if (StringUtils.isEmpty(registrationBean.getPasswordConfirmation())) {
             errors.add("Password confirmation field is empty.");

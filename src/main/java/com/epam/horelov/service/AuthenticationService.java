@@ -23,7 +23,7 @@ public class AuthenticationService {
         if (authenticationBean.getPassword().hashCode() == potentialUser.getPassword()){
             return potentialUser;
         } else {
-            throw new AuthenticationException();
+            throw new AuthenticationException("Something went wrong. Please, try again");
         }
     }
 }
