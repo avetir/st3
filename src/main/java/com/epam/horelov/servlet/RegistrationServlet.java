@@ -27,8 +27,7 @@ public class RegistrationServlet extends HttpServlet {
     public static final String PASSWORD_CONFIRMATION = "password-confirmation";
     public static final int MAX_FIELD_CONTENT_LENGTH = 40;
 
-    private RegistrationService registrationService =
-            (RegistrationService) getServletContext().getAttribute("REGISTRATION_SERVICE");
+    private RegistrationService registrationService;
 
     public RegistrationBean fillBean(HttpServletRequest request) {
 
@@ -88,12 +87,15 @@ public class RegistrationServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-//        HttpSession session = req.getSession();
+        ServletContext servletContext = req.getServletContext();
+        registrationService = (RegistrationService) servletContext.getAttribute("registration_service");
+
         RegistrationBean bean = fillBean(req);
         List<String> errors = validateBean(bean);
         if (CollectionUtils.isNotEmpty(errors)) {
             req.setAttribute("errorList", errors);
             doGet(req, resp);
+            return;
         }
 
         registrationService.register(bean);

@@ -2,12 +2,17 @@ package com.epam.horelov.dal.dbcp;
 
 import com.epam.horelov.exception.CustomException;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Properties;
 
 import static java.lang.Thread.sleep;
 
@@ -25,8 +30,17 @@ public class ConnectionPoolImpl implements ConnectionPool{
     }
 
     private Connection createConnection() {
+        String path = new File("src/main/resources/dbconfig.properties").getAbsolutePath();
+        Properties props = new Properties();
+        try(FileInputStream in = new FileInputStream(path)) {
+            props.load(in);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         try {
-            return DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD);
+            return DriverManager.getConnection(props.getProperty("dbUrl"), props.getProperty("dbUserName"), props.getProperty("dbPassword"));
         } catch (SQLException ex) {
             throw new CustomException(CREATE_CONNECTION_ERROR_MSG, ex);
         }

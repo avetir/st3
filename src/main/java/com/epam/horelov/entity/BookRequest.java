@@ -7,6 +7,7 @@ public class BookRequest {
     private String id;
     private LocalDateTime dateTimeIn;
     private LocalDateTime dateTimeOut;
+    private LocalDateTime requestDateTime;
     private RequestStatus status;
     private RoomClass roomClass;
 
@@ -36,6 +37,14 @@ public class BookRequest {
 
     public void setDateTimeOut(LocalDateTime dateTimeOut) {
         this.dateTimeOut = dateTimeOut;
+    }
+
+    public LocalDateTime getRequestDateTime() {
+        return requestDateTime;
+    }
+
+    public void setRequestDateTime(LocalDateTime requestDate) {
+        this.requestDateTime = requestDate;
     }
 
     public RequestStatus getStatus() {

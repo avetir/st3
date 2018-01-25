@@ -25,7 +25,8 @@ CREATE TABLE H_request
     date_time_out TIMESTAMP NOT NULL,
 	  user_id CHAR(36) REFERENCES H_user (id),
 	  room_number INTEGER REFERENCES H_room (room_number),
-    room_class VARCHAR(50) NOT NULL
+    room_class VARCHAR(50) NOT NULL,
+    request_date TIMESTAMP NOT NULL
 );
 
 CREATE TABLE H_Bill

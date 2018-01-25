@@ -14,8 +14,8 @@ public class AuthenticationService {
 
     private UserDao userDao;
 
-    public AuthenticationService(){
-        userDao = new UserDaoImpl();
+    public AuthenticationService(UserDao userDao){
+        this.userDao = userDao;
     }
 
     public User logIn(AuthenticationBean authenticationBean) throws AuthenticationException {
@@ -23,7 +23,7 @@ public class AuthenticationService {
         if (authenticationBean.getPassword().hashCode() == potentialUser.getPassword()){
             return potentialUser;
         } else {
-            throw new AuthenticationException("Something went wrong. Please, try again");
+            throw new AuthenticationException("Password incorrect");
         }
     }
 }

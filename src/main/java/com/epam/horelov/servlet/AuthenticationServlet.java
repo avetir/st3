@@ -9,6 +9,7 @@ import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 
 import javax.servlet.RequestDispatcher;
+import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -29,7 +30,7 @@ public class AuthenticationServlet extends HttpServlet {
     public static final String PASSWORD = "password";
     public static final int MAX_FIELD_CONTENT_LENGTH = 40;
 
-    private AuthenticationService authenticationService = new AuthenticationService();
+    private AuthenticationService authenticationService;
 
     public AuthenticationBean fillBean(HttpServletRequest request) {
 
@@ -71,6 +72,9 @@ public class AuthenticationServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+
+        ServletContext servletContext = req.getServletContext();
+        authenticationService = (AuthenticationService) servletContext.getAttribute("authentication_service");
 
         HttpSession session = req.getSession();
         AuthenticationBean bean = fillBean(req);

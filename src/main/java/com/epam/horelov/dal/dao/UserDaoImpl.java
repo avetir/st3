@@ -6,6 +6,7 @@ import com.epam.horelov.entity.Roles;
 import com.epam.horelov.entity.User;
 import com.epam.horelov.exception.CustomException;
 
+import javax.servlet.http.HttpServletRequest;
 import java.sql.*;
 
 public class UserDaoImpl implements UserDao {
@@ -27,8 +28,7 @@ public class UserDaoImpl implements UserDao {
     private PreparedStatement selectUserPreparedStatement;
     private PreparedStatement insertUserPreparedStatement;
 
-    public UserDaoImpl() {
-        ConnectionPool connectionPool = new ConnectionPoolImpl();
+    public UserDaoImpl(ConnectionPool connectionPool) {
         connection = connectionPool.getConnection();
         try {
             connection.setAutoCommit(false);
@@ -48,14 +48,14 @@ public class UserDaoImpl implements UserDao {
     public User getUserByEmail(String email) {
         try {
             selectUserPreparedStatement.setString(1, email);
-            ResultSet rs = selectUserPreparedStatement.executeQuery();
+            ResultSet resultSet = selectUserPreparedStatement.executeQuery();
             User user = new User();
-            while (rs.next()) {
-                user.setId(rs.getString(ID));
-                user.setFullName(rs.getString(NAME));
-                user.setEmail(rs.getString(EMAIL));
-                user.setPassword(rs.getInt(PASSWORD));
-                user.setRole(Roles.valueOf(rs.getString(ROLE)));
+            while (resultSet.next()) {
+                user.setId(resultSet.getString(ID));
+                user.setFullName(resultSet.getString(NAME));
+                user.setEmail(resultSet.getString(EMAIL));
+                user.setPassword(resultSet.getInt(PASSWORD));
+                user.setRole(Roles.valueOf(resultSet.getString(ROLE)));
             }
             return user;
         } catch (SQLException ex) {

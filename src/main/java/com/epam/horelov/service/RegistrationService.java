@@ -12,8 +12,8 @@ public class RegistrationService {
 
     private UserDao userDao;
 
-    public RegistrationService(UserDaoImpl userDaoImpl){
-        userDao = userDaoImpl;
+    public RegistrationService(UserDao userDao){
+        this.userDao = userDao;
     }
 
     private User createUser(RegistrationBean registrationBean) {

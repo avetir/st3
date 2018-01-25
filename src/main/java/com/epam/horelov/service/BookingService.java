@@ -8,7 +8,6 @@ import com.epam.horelov.entity.RoomClass;
 import com.epam.horelov.entity.User;
 
 import javax.servlet.http.HttpServletRequest;
-import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.UUID;
@@ -21,8 +20,8 @@ public class BookingService {
     private static final String A_ROOM_CLASS = "A";
     private static final String B_ROOM_CLASS = "B";
 
-    public BookingService() {
-        bookRequestDao = new BookRequestDaoImpl();
+    public BookingService(BookRequestDao bookRequestDao) {
+        this.bookRequestDao = bookRequestDao;
     }
 
     private BookRequest createBookRequest(HttpServletRequest req){
@@ -48,6 +47,8 @@ public class BookingService {
 
         //todo: ROOM CHOOSING, FILL ROOM SELECTION OPTIONS SELECT FROM DATABASE (BOOKING.JSP)
         bookRequest.setRoomNumber(123);
+
+        bookRequest.setRequestDateTime(LocalDateTime.parse(LocalDateTime.now().format(formatter)));
 
         return bookRequest;
     }

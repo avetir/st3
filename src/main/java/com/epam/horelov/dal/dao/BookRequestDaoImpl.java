@@ -15,19 +15,15 @@ public class BookRequestDaoImpl implements BookRequestDao {
     private static final String SET_AUTO_COMMIT_FALSE_ERROR_MSG = "Cannot set auto commit of connection to false";
     private static final String STATEMENTS_PREPARING_ERROR_MSG = "Cannot prepare statement";
     private static final String INSERT_BOOK_REQUEST_ERROR_MSG = "Cannot insert book request";
-    private static final String INSERT_BOOK_REQUEST_QUERY = "" +
-            "INSERT INTO " +
-            "h_request (id, status, places_number, date_time_in, date_time_out, user_id, room_number, room_class) " +
-            "VALUES " +
-            "(?, ?::REQUEST_STATUS, ?, ?, ?, ?, ?, ?::ROOM_CLASS_TYPE);";
-    private static final String UPDATE_ROOM_STATUS_QUERY = "UPDATE h_room SET status = 'BOOKED' WHERE h_room.room_number = ?;";
+    private static final String INSERT_BOOK_REQUEST_QUERY =
+            "INSERT INTO h_request (id, status, places_number, date_time_in, date_time_out, user_id, room_number, room_class, request_date) " +
+            "VALUES (?, ?::REQUEST_STATUS, ?, ?, ?, ?, ?, ?::ROOM_CLASS_TYPE, ?);";
 
     private Connection connection;
     private PreparedStatement insertBookRequestPreparedStatement;
-    private PreparedStatement updateRoomStatusStatement;
+//    private PreparedStatement updateRoomStatusStatement;
 
-    public BookRequestDaoImpl() {
-        ConnectionPool connectionPool = new ConnectionPoolImpl();
+    public BookRequestDaoImpl(ConnectionPool connectionPool) {
         connection = connectionPool.getConnection();
         try {
             connection.setAutoCommit(false);
@@ -37,7 +33,7 @@ public class BookRequestDaoImpl implements BookRequestDao {
         }
         try {
             insertBookRequestPreparedStatement = connection.prepareStatement(INSERT_BOOK_REQUEST_QUERY);
-            updateRoomStatusStatement = connection.prepareStatement(UPDATE_ROOM_STATUS_QUERY);
+//            updateRoomStatusStatement = connection.prepareStatement(UPDATE_ROOM_STATUS_QUERY);
         } catch (SQLException ex) {
             throw new CustomException(STATEMENTS_PREPARING_ERROR_MSG, ex);
         }
@@ -54,10 +50,11 @@ public class BookRequestDaoImpl implements BookRequestDao {
             insertBookRequestPreparedStatement.setString(6, bookRequest.getUserId());
             insertBookRequestPreparedStatement.setInt(7, bookRequest.getRoomNumber());
             insertBookRequestPreparedStatement.setString(8, bookRequest.getRoomClass().toString());
+            insertBookRequestPreparedStatement.setTimestamp(9, Timestamp.valueOf(bookRequest.getRequestDateTime()));
             insertBookRequestPreparedStatement.executeUpdate();
 
-            updateRoomStatusStatement.setInt(1,bookRequest.getRoomNumber());
-            updateRoomStatusStatement.executeUpdate();
+//            updateRoomStatusStatement.setInt(1,bookRequest.getRoomNumber());
+//            updateRoomStatusStatement.executeUpdate();
 
             connection.commit();
         } catch (SQLException ex) {
