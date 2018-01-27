@@ -46,7 +46,7 @@ public class BookingService {
         bookRequest.setStatus(RequestStatus.PENDING);
 
         //todo: ROOM CHOOSING, FILL ROOM SELECTION OPTIONS SELECT FROM DATABASE (BOOKING.JSP)
-        bookRequest.setRoomNumber(123);
+        bookRequest.setRoomNumber(Integer.parseInt(req.getParameter("room")));
 
         bookRequest.setRequestDateTime(LocalDateTime.parse(LocalDateTime.now().format(formatter)));
 

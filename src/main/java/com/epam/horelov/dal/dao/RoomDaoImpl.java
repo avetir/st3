@@ -18,6 +18,7 @@ public class RoomDaoImpl implements RoomDao {
     private static final String SET_AUTO_COMMIT_FALSE_ERROR_MSG = "Cannot set auto commit of connection to false";
     private static final String STATEMENTS_PREPARING_ERROR_MSG = "Cannot prepare statements";
     private static final String GET_ALL_ROOMS_ERROR_MSG = "Cannot get room list";
+    private static final String GET_ROOM_BY_NUMBER_ERROR_MSG = "Cannot get room by number";
     private static final String SELECT_ALL_ROOMS_QUERY = "SELECT * FROM h_room;";
     private static final String UPDATE_ROOM_STATUS_QUERY = "UPDATE h_room SET status = ? WHERE h_room.room_number = ?;";
 
@@ -65,6 +66,24 @@ public class RoomDaoImpl implements RoomDao {
             return roomArrayList;
         } catch (SQLException ex) {
             throw new CustomException(GET_ALL_ROOMS_ERROR_MSG, ex);
+        }
+    }
+
+    @Override
+    public Room getRoomByNumber(int roomNumber){
+        try {
+            ResultSet resultSet = selectAllRoomsPreparedStatement.executeQuery();
+            Room room = new Room();
+            while (resultSet.next()) {
+                room.setNumber(resultSet.getInt(ROOM_NUMBER));
+                room.setCapacity(resultSet.getInt(CAPACITY));
+                room.setRoomClass(RoomClass.valueOf(resultSet.getString(ROOM_CLASS)));
+                room.setStatus(RoomStatus.valueOf(resultSet.getString(STATUS)));
+                room.setPrice(resultSet.getInt(PRICE));
+            }
+            return room;
+        } catch (SQLException ex) {
+            throw new CustomException(GET_ROOM_BY_NUMBER_ERROR_MSG, ex);
         }
     }
 

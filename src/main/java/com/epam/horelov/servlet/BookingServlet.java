@@ -27,7 +27,6 @@ public class BookingServlet extends HttpServlet {
 
         ServletContext servletContext = req.getServletContext();
         bookingService = (BookingService) servletContext.getAttribute("booking_service");
-
         bookingService.book(req);
         this.doGet(req, resp);
     }
