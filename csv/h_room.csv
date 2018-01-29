@@ -1,0 +1,4 @@
+"room_number","capacity","room_class","status","price"
+123,2,"A","EMPTY",322
+128,3,"B","BOOKED",250
+135,2,"APLUS","UNAVAILABLE",400

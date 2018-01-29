@@ -19,6 +19,14 @@
         <form action="booking" method="get">
             <input type="submit" value="Do a booking">
         </form>
+
+
+        <c:if test = "${sessionScope.user.role == \"MANAGER\"}">
+            <form action="requests" method="get">
+                <input type="submit" value="Manage requests">
+            </form>
+        </c:if>
+
     </div>
 </body>
 </html>

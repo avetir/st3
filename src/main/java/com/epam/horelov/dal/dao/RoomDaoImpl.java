@@ -20,7 +20,7 @@ public class RoomDaoImpl implements RoomDao {
     private static final String GET_ALL_ROOMS_ERROR_MSG = "Cannot get room list";
     private static final String GET_ROOM_BY_NUMBER_ERROR_MSG = "Cannot get room by number";
     private static final String SELECT_ALL_ROOMS_QUERY = "SELECT * FROM h_room;";
-    private static final String UPDATE_ROOM_STATUS_QUERY = "UPDATE h_room SET status = ? WHERE h_room.room_number = ?;";
+    private static final String SELECT_ROOM_BY_NUMBER_QUERY = "SELECT * FROM h_room WHERE room_number = ?;";
 
     public static final String ROOM_NUMBER = "room_number";
     public static final String CAPACITY = "capacity";
@@ -30,7 +30,7 @@ public class RoomDaoImpl implements RoomDao {
 
     private Connection connection;
     private PreparedStatement selectAllRoomsPreparedStatement;
-    private PreparedStatement updateRoomStatusPreparedStatement;
+    private PreparedStatement selectRoomByNumberPreparedStatement;
 
 
     public RoomDaoImpl(ConnectionPool connectionPool){
@@ -43,7 +43,7 @@ public class RoomDaoImpl implements RoomDao {
         }
         try {
             selectAllRoomsPreparedStatement = connection.prepareStatement(SELECT_ALL_ROOMS_QUERY);
-            updateRoomStatusPreparedStatement = connection.prepareStatement(UPDATE_ROOM_STATUS_QUERY);
+            selectRoomByNumberPreparedStatement = connection.prepareStatement(SELECT_ROOM_BY_NUMBER_QUERY);
         } catch (SQLException ex) {
             throw new CustomException(STATEMENTS_PREPARING_ERROR_MSG, ex);
         }
@@ -72,7 +72,8 @@ public class RoomDaoImpl implements RoomDao {
     @Override
     public Room getRoomByNumber(int roomNumber){
         try {
-            ResultSet resultSet = selectAllRoomsPreparedStatement.executeQuery();
+            selectRoomByNumberPreparedStatement.setInt(1, roomNumber);
+            ResultSet resultSet = selectRoomByNumberPreparedStatement.executeQuery();
             Room room = new Room();
             while (resultSet.next()) {
                 room.setNumber(resultSet.getInt(ROOM_NUMBER));
@@ -87,8 +88,4 @@ public class RoomDaoImpl implements RoomDao {
         }
     }
 
-    @Override
-    public void updateRoomStatus(int roomNumber) {
-
-    }
 }

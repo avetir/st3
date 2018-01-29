@@ -8,6 +8,5 @@ public interface RoomDao {
 
     public List<Room> getAllRooms();
     public Room getRoomByNumber(int roomNumber);
-    public void updateRoomStatus(int roomNumber);
 
 }
