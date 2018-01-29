@@ -3,6 +3,8 @@ package com.epam.horelov.servlet;
 import com.epam.horelov.bean.AuthenticationBean;
 import com.epam.horelov.bean.RegistrationBean;
 import com.epam.horelov.exception.AuthenticationException;
+import com.epam.horelov.exception.CustomException;
+import com.epam.horelov.exception.GetSingleUserException;
 import com.epam.horelov.service.AuthenticationService;
 import com.epam.horelov.service.RegistrationService;
 import org.apache.commons.collections4.CollectionUtils;
@@ -79,14 +81,22 @@ public class AuthenticationServlet extends HttpServlet {
         HttpSession session = req.getSession();
         AuthenticationBean bean = fillBean(req);
         List<String> errors = validateBean(bean);
+
         if (CollectionUtils.isNotEmpty(errors)) {
             req.setAttribute("errorList", errors);
             doGet(req, resp);
+            return;
         }
         try {
             session.setAttribute("user", authenticationService.logIn(bean));
-            resp.sendRedirect("/booking");
+            resp.sendRedirect("/home");
         } catch (AuthenticationException ex){
+            errors.add(ex.getMessage());
+            req.setAttribute("errorList", errors);
+            doGet(req, resp);
+        } catch (GetSingleUserException ex){
+            errors.add(ex.getMessage());
+            req.setAttribute("errorList", errors);
             doGet(req, resp);
         }
 //          RequestDispatcher dispatcher = getServletContext().getRequestDispatcher();

@@ -6,8 +6,6 @@ ALTER TABLE H_room ALTER COLUMN status TYPE room_status USING status::room_statu
 
 CREATE TYPE room_class_type AS ENUM ('APLUS', 'A', 'B');
 ALTER TABLE H_room ALTER COLUMN room_class TYPE room_class_type USING room_class::room_class_type;
-
-CREATE TYPE room_class_type AS ENUM ('APLUS', 'A', 'B');
 ALTER TABLE H_request ALTER COLUMN room_class TYPE room_class_type USING room_class::room_class_type;
 
 CREATE TYPE request_status AS ENUM ('PENDING', 'FULFULLED', 'REJECTED');

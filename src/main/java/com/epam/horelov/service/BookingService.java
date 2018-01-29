@@ -35,6 +35,9 @@ public class BookingService {
         bookRequest.setDateTimeIn(LocalDateTime.parse(req.getParameter("date-from"), formatter));
         bookRequest.setDateTimeOut(LocalDateTime.parse(req.getParameter("date-to"), formatter));
 
+        String stringRoomClass = req.getParameter("room-class");
+        RoomClass roomClass = RoomClass.valueOf(stringRoomClass);
+
         if (A_PLUS_ROOM_CLASS.equals(req.getParameter("room-class"))) {
             bookRequest.setRoomClass(RoomClass.APLUS);
         } else if (A_ROOM_CLASS.equals(req.getParameter("room-class"))) {
@@ -46,7 +49,7 @@ public class BookingService {
         bookRequest.setStatus(RequestStatus.PENDING);
 
         //todo: ROOM CHOOSING, FILL ROOM SELECTION OPTIONS SELECT FROM DATABASE (BOOKING.JSP)
-        bookRequest.setRoomNumber(Integer.parseInt(req.getParameter("room")));
+        bookRequest.setRoomNumber(Integer.parseInt(req.getParameter("roomNumber")));
 
         bookRequest.setRequestDateTime(LocalDateTime.parse(LocalDateTime.now().format(formatter)));
 

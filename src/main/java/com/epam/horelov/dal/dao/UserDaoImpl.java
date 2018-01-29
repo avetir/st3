@@ -5,6 +5,7 @@ import com.epam.horelov.dal.dbcp.ConnectionPoolImpl;
 import com.epam.horelov.entity.Roles;
 import com.epam.horelov.entity.User;
 import com.epam.horelov.exception.CustomException;
+import com.epam.horelov.exception.GetSingleUserException;
 
 import javax.servlet.http.HttpServletRequest;
 import java.sql.*;
@@ -13,8 +14,8 @@ public class UserDaoImpl implements UserDao {
 
     private static final String SET_AUTO_COMMIT_FALSE_ERROR_MSG = "Cannot set auto commit of connection to false";
     private static final String STATEMENTS_PREPARING_ERROR_MSG = "Cannot prepare statements";
-    private static final String GET_USER_BY_EMAIL_ERROR_MSG = "Cannot get user by email";
-    private static final String INSERT_USER_ERROR_MSG = "Cannot insert user";
+    private static final String GET_USER_BY_EMAIL_ERROR_MSG = "There's no such user; maybe, you should register first?";
+    private static final String INSERT_USER_ERROR_MSG = "Registration error";
     private static final String SELECT_USER_BY_EMAIL_QUERY = "SELECT * FROM h_user WHERE H_user.email = ?;";
     private static final String INSERT_USER_QUERY = "INSERT INTO h_user (id, name, email, password, role) VALUES (?, ?, ?, ?, ?::USER_ROLE);";
 
@@ -59,7 +60,7 @@ public class UserDaoImpl implements UserDao {
             }
             return user;
         } catch (SQLException ex) {
-            throw new CustomException(GET_USER_BY_EMAIL_ERROR_MSG, ex);
+            throw new GetSingleUserException(GET_USER_BY_EMAIL_ERROR_MSG);
         }
     }
 
