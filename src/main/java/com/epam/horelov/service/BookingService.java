@@ -29,14 +29,27 @@ public class BookingService {
 
         bookRequest.setId(UUID.randomUUID().toString());
         bookRequest.setUserId(((User)req.getSession().getAttribute("user")).getId());
-        bookRequest.setPlacesNumber(Integer.parseInt(req.getParameter("place-number")));
+
+        int placesNumber = Integer.parseInt(req.getParameter("place-number"));
+
+        if (placesNumber > 0) {
+            bookRequest.setPlacesNumber(placesNumber);
+        } else {
+            throw new IllegalArgumentException("Places number must be > 0");
+        }
 
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm");
-        bookRequest.setDateTimeIn(LocalDateTime.parse(req.getParameter("date-from"), formatter));
-        bookRequest.setDateTimeOut(LocalDateTime.parse(req.getParameter("date-to"), formatter));
-
-        String stringRoomClass = req.getParameter("room-class");
-        RoomClass roomClass = RoomClass.valueOf(stringRoomClass);
+        LocalDateTime dateIn = LocalDateTime.parse(req.getParameter("date-from"), formatter);
+        LocalDateTime dateOut = LocalDateTime.parse(req.getParameter("date-to"), formatter);
+        if (!dateIn.isBefore(LocalDateTime.now()) &&
+            !dateOut.isBefore(LocalDateTime.now()) &&
+            dateIn.isBefore(dateOut)) {
+            bookRequest.setDateTimeIn(dateIn);
+            bookRequest.setDateTimeOut(dateOut);
+        }
+        else {
+            throw new IllegalArgumentException("Please, make sure that dates you've entered hadn't passed yet");
+        }
 
         if (A_PLUS_ROOM_CLASS.equals(req.getParameter("room-class"))) {
             bookRequest.setRoomClass(RoomClass.APLUS);
@@ -49,7 +62,7 @@ public class BookingService {
         bookRequest.setStatus(RequestStatus.PENDING);
 
         //todo: ROOM CHOOSING, FILL ROOM SELECTION OPTIONS SELECT FROM DATABASE (BOOKING.JSP)
-        bookRequest.setRoomNumber(128);
+        bookRequest.setRoomNumber(Integer.parseInt(req.getParameter("roomNumber")));
 
         bookRequest.setRequestDateTime(LocalDateTime.parse(LocalDateTime.now().format(formatter)));
 

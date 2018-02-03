@@ -10,6 +10,11 @@
     </style>
 </head>
 <body>
+    <div>
+        <form action="home" method="get">
+            <input type="submit" value="Home Page">
+        </form>
+    </div>
     <div style="float: right">
         <form action="logout" method="post" style="right: 0">
             <c:out value="Hello, ${sessionScope.user.fullName}."/>

@@ -17,14 +17,13 @@ public class ApproveRequestServlet extends HttpServlet {
     private RequestsProcessingService requestsProcessingService;
 
     @Override
-    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 
         requestsProcessingService = (RequestsProcessingService) getServletContext().getAttribute("request_processing_service");
         String requestId = req.getParameter("requestId");
         requestsProcessingService.updateRequestStatus(RequestStatus.FULFULLED, requestId);
 
-        RequestDispatcher dispatcher = getServletContext().getRequestDispatcher("/requests");
-        dispatcher.forward(req, resp);
+        resp.sendRedirect("/requests");
 
     }
 }
